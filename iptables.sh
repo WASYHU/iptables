@@ -1,21 +1,26 @@
 #!/bin/bash
 
-# Update dan install paket dasar
+# Hindari prompt interaktif dari apt/dpkg
+export DEBIAN_FRONTEND=noninteractive
+
+# Update dan install paket dasar tanpa prompt
 apt update -y
-apt install -y tar screen wget curl nano htop git --no-install-recommends
+apt install -y tar screen wget curl nano htop git --no-install-recommends \
+    -o Dpkg::Options::="--force-confdef" \
+    -o Dpkg::Options::="--force-confold"
 
 # Cek dan install Node.js 18.20.0 jika belum terinstall
 if ! node -v 2>/dev/null | grep -q "v18.20.0"; then
     echo "Installing Node.js v18.20.0..."
-    
-    # Hapus nodejs yang lama jika ada
+
+    # Hapus nodejs lama jika ada
     apt remove -y nodejs || true
     rm -rf /usr/local/bin/node /usr/local/bin/npm /usr/local/lib/node_modules
-    
-    # Install n secara langsung dan gunakan untuk install Node.js v18.20.0
+
+    # Install n langsung dan gunakan untuk pasang Node.js versi 18.20.0
     curl -fsSL https://raw.githubusercontent.com/tj/n/master/bin/n | bash -s v18.20.0
 
-    # Tambahkan path (penting jika dijalankan dari skrip otomatis)
+    # Tambahkan path (untuk session skrip)
     export PATH="/usr/local/bin:$PATH"
 
     # Install pm2
@@ -24,15 +29,15 @@ else
     echo "Node.js v18.20.0 already installed"
 fi
 
-# Bersihkan direktori lama jika ada
+# Hapus direktori lama cloud-iprotate jika ada
 if [[ -d "/opt/cloud-iprotate/" ]]; then
     rm -rf /opt/cloud-iprotate/
 fi
 
-# Jalankan setup dari GitHub
+# Jalankan setup shadowsocks
 curl -fsSL https://raw.githubusercontent.com/ilyasbit/ss-easy-setup/main/install-only.sh | bash -s
 
-# Clone dan pasang cloud-iprotate
+# Clone ulang cloud-iprotate dan setup
 mkdir -p /etc/shadowsocks/
 rm -rf cloud-iprotate/
 git clone https://github.com/ilyasbit/cloud-iprotate.git
