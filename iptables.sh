@@ -30,8 +30,8 @@ else
 fi
 
 # Hapus direktori lama cloud-iprotate jika ada
-if [[ -d "/opt/deo.putar/" ]]; then
-    rm -rf /opt/deo.putar/
+if [[ -d "/opt/cloud-iprotate/" ]]; then
+    rm -rf /opt/cloud-iprotate/
 fi
 
 # Jalankan setup shadowsocks
@@ -39,9 +39,9 @@ curl -fsSL https://raw.githubusercontent.com/ilyasbit/ss-easy-setup/main/install
 
 # Clone ulang cloud-iprotate dan setup
 mkdir -p /etc/shadowsocks/
-rm -rf deo.putar/
-git clone https://github.com/WASYHU/deo.putar.git
-mv deo.putar /opt/
-cd /opt/deo.putar/
+rm -rf cloud-iprotate/
+git clone https://github.com/ilyasbit/cloud-iprotate.git
+mv cloud-iprotate /opt/
+cd /opt/cloud-iprotate/
 npm install
 cd ~
